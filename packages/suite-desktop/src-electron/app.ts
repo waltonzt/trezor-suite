@@ -37,8 +37,6 @@ global.resourcesPath = isDev
     ? path.join(__dirname, '..', 'public', 'static')
     : process.resourcesPath;
 
-logger.info('main', 'Application starting');
-
 const init = async () => {
     buildInfo();
     await computerInfo();
@@ -77,8 +75,17 @@ const init = async () => {
     });
 };
 
-app.name = APP_NAME; // overrides @trezor/suite-desktop app name in menu
-app.on('ready', init);
+// Single instance lock
+const singleInstace = app.requestSingleInstanceLock();
+if (!singleInstace) {
+    logger.warn('main', 'Second instance detected, quitting...');
+    app.quit();
+} else {
+    logger.info('main', 'Application starting');
+
+    app.name = APP_NAME; // overrides @trezor/suite-desktop app name in menu
+    app.on('ready', init);
+}
 
 app.on('before-quit', () => {
     if (!mainWindow) return;
