@@ -134,7 +134,7 @@ const CoinsGroup = ({
     const isDeviceLocked = isLocked();
     const theme = useTheme();
     return (
-        <Wrapper data-test="@settings/wallet/coins-group">
+        <Wrapper data-test={`@settings/wallet/coins-group/${props.type}`}>
             <Section
                 customHeader={
                     <Header>
