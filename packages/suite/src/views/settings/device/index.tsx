@@ -5,6 +5,7 @@ import {
     ActionButton,
     ActionColumn,
     ActionInput,
+    ActionSelect,
     SectionItem,
     Section,
     TextColumn,
@@ -23,6 +24,11 @@ import React, { createRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { Props } from './Container';
+
+const safetyChecksOptions = [
+    { label: 'Strict (default)', value: 0 },
+    { label: 'Prompt', value: 1 },
+];
 
 const RotationButton = styled(ActionButton)`
     min-width: 81px;
@@ -467,6 +473,35 @@ const Settings = ({ device, applySettings, changePin, openModal, goto }: Props) 
                         </ActionButton>
                     </ActionColumn>
                 </SectionItem>
+                {features.safety_checks && (
+                    <SectionItem data-test="@settings/device/safety-checks-row">
+                        <TextColumn
+                            title={<Translation id="TR_DEVICE_SETTINGS_BUTTON_SAFETY_CHECKS_TITLE" />}
+                            description={<Translation id="TR_DEVICE_SETTINGS_SAFETY_CHECKS_DESC" />}
+                        />
+                        <ActionSelect
+                            noTopLabel
+                            hideTextCursor
+                            useKeyPressScroll
+                            onChange={(option: { value: number; label: string }) => {
+                                applySettings({
+                                    safety_checks: option.value,
+                                });
+                                analytics.report({
+                                    type: 'settings/device/change-safety-checks',
+                                    payload: {
+                                        value: option.value,
+                                    },
+                                });
+                            }}
+                            value={{
+                                label: features.safety_checks,
+                            }}
+                            options={safetyChecksOptions}
+                            data-test="@settings/fiat-select"
+                        />
+                    </SectionItem>
+                )}
             </Section>
         </SettingsLayout>
     );

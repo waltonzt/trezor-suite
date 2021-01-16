@@ -1374,6 +1374,14 @@ const definedMessages = defineMessages({
         defaultMessage: 'Change PIN',
         id: 'TR_DEVICE_SETTINGS_CHANGE_PIN_TITLE',
     },
+    TR_DEVICE_SETTINGS_BUTTON_SAFETY_CHECKS_TITLE: {
+        defaultMessage: 'Safety checks override',
+        id: 'TR_DEVICE_SETTINGS_BUTTON_SAFETY_CHECKS_TITLE',
+    },
+    TR_DEVICE_SETTINGS_SAFETY_CHECKS_DESC: {
+        defaultMessage: 'When set to \'Prompt\' Trezor will allow you to do some advanced and potentially unsafe operations that are disallowed by default. \'Strict\' is the default option where such operations are rejected right away. Change only if you are sure what you are doing.',
+        id: 'TR_DEVICE_SETTINGS_SAFETY_CHECKS_DESC',
+    },
     TR_DID_YOU_PURCHASE: {
         defaultMessage:
             'Please note, that device packaging including holograms have changed over time. You can check packaging details {TR_PACKAGING_LINK}. Also be sure you made your purchase from {TR_RESELLERS_LINK}. Otherwise, the device you are holding in your hands might be a counterfeit. Please {TR_CONTACT_OUR_SUPPORT_LINK}',

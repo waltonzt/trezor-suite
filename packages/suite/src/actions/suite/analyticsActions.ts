@@ -70,7 +70,7 @@ export type AnalyticsEvent =
           /**
         device-connect
         is logged when user connects device
-        - if device is not in bootloader, some of its features are logged 
+        - if device is not in bootloader, some of its features are logged
         */
           type: 'device-connect';
           payload: {
@@ -95,7 +95,7 @@ export type AnalyticsEvent =
     | {
           /**
         device-update-firmware
-        is log after firmware update call to device is finished. 
+        is log after firmware update call to device is finished.
         */
           type: 'device-update-firmware';
           payload: {
@@ -115,7 +115,7 @@ export type AnalyticsEvent =
           /**
         initial-run-completed
         when new installation of trezor suite starts it is in initial-run mode which means that some additional screens appear (welcome, analytics, onboarding)
-        it is completed either by going trough onboarding or skipping it. once completed event is registered, we log some data connected up to this point     
+        it is completed either by going trough onboarding or skipping it. once completed event is registered, we log some data connected up to this point
          */
           type: 'initial-run-completed';
           payload: {
@@ -139,7 +139,7 @@ export type AnalyticsEvent =
           /**
         account-create
         logged either automatically upon each suite start as default switched on accounts are loaded
-        or when user adds account manually 
+        or when user adds account manually
         */
           type: 'account-create';
           payload: {
@@ -226,6 +226,12 @@ export type AnalyticsEvent =
           };
       }
     | { type: 'settings/device/goto/wipe' }
+    | {
+            type: 'settings/device/change-safety-checks'
+            payload: {
+                value: 0 | 1 | 2;
+            };
+      }
     | {
           type: 'settings/device/change-passphrase-protection';
           payload: {
