@@ -25,25 +25,25 @@
 To remove a database remove following folder:
 
 #### Windows
-`C:\Users\<user>\AppData\Roaming\@trezor\suite-desktop\IndexedDB`
+`C:\Users\<user>\AppData\Roaming\trezor-suite-desktop\IndexedDB`
 
 #### Linux
-`/home/<user>/.config/@trezor/suite-desktop/IndexedDB`
+`/home/<user>/.config/trezor-suite-desktop/IndexedDB`
 
 #### macOS
-`/Users/<user>/Library/Application Support/@trezor/suite-desktop/IndexedDB`
+`/Users/<user>/Library/Application Support/trezor-suite-desktop/IndexedDB`
 
 ### Clearing Electron cache
 To clear electron cache delete following folder:
 
 #### Windows
-`C:\Users\<user>\AppData\Roaming\@trezor\suite-desktop\Cache`
+`C:\Users\<user>\AppData\Roaming\trezor-suite-desktop\Cache`
 
 #### Linux
-`/home/<user>/.config/@trezor/suite-desktop/Cache`
+`/home/<user>/.config/trezor-suite-desktop/Cache`
 
 #### macOS
-`/Users/<user>/Library/ApplicationSupport/@trezor/suite-desktop/Cache`
+`/Users/<user>/Library/ApplicationSupport/trezor-suite-desktop/Cache`
 
 
 ## Tests

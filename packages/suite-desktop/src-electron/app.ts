@@ -9,9 +9,9 @@ import { MIN_HEIGHT, MIN_WIDTH } from '@lib/screen';
 import Logger, { LogLevel, defaultOptions as loggerDefaults } from '@lib/logger';
 import { buildInfo, computerInfo } from '@lib/info';
 import modules from '@lib/modules';
+import pkg from '../package.json';
 
 let mainWindow: BrowserWindow;
-const APP_NAME = 'Trezor Suite';
 const src = isDev
     ? 'http://localhost:8000/'
     : url.format({
@@ -47,7 +47,7 @@ const init = async () => {
     logger.debug('init', `Create Browswer Window (${winBounds.width}x${winBounds.height})`);
 
     mainWindow = new BrowserWindow({
-        title: APP_NAME,
+        title: pkg.build.productName,
         width: winBounds.width,
         height: winBounds.height,
         frame: false,
@@ -77,7 +77,7 @@ const init = async () => {
     });
 };
 
-app.name = APP_NAME; // overrides @trezor/suite-desktop app name in menu
+app.name = pkg.build.productName;
 app.on('ready', init);
 
 app.on('before-quit', () => {
