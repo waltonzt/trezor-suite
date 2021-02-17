@@ -77,7 +77,7 @@ suite-web deploy dev:
     COMPOSE_FILE: ./docker/docker-compose.suite-ci.yml
     # corresponds with the NextJs assetPrefix. Tells Cypress where is the index of application
     CYPRESS_ASSET_PREFIX: /web
-    CYPRESS_baseUrl: ${DEV_SERVER_URL}/suite-web/${CI_BUILD_REF_NAME}
+    CYPRESS_baseUrl: ${DEV_SERVER_URL}/suite-web/${CI_BUILD_REF_NAME}/
     # should tests do snapshot testing
     CYPRESS_SNAPSHOT: 1
     # reporter url
