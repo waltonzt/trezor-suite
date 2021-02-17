@@ -25,6 +25,6 @@ services:
       - CI_RUNNER_DESCRIPTION=$CI_RUNNER_DESCRIPTION
     network_mode: service:trezor-user-env-unix
     working_dir: /trezor-suite
-    command: bash -c "node ./packages/integration-tests/projects/suite-web/run_tests.js --project /trezor-suite/packages/integration-tests/projects/suite-web --stage=$TEST_GROUP"
+    command: bash -c "curl https://suite.corp.sldev.cz/suite-web/tsusanka/ci-fix/ && node ./packages/integration-tests/projects/suite-web/run_tests.js --project /trezor-suite/packages/integration-tests/projects/suite-web --stage=$TEST_GROUP"
     volumes:
       - ../:/trezor-suite
