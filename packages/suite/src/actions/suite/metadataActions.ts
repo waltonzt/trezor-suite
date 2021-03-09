@@ -341,6 +341,7 @@ export const fetchMetadata = (deviceState: string) => async (
         // if interval for watching provider is not set, create it
         if (!fetchIntervals[deviceState]) {
             fetchIntervals[deviceState] = setInterval(() => {
+                console.log('setting fethc interval');
                 if (!getState().suite.online) {
                     return;
                 }
