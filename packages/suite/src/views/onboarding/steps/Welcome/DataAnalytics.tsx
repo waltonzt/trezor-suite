@@ -1,15 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useSpring, useTransition, config, animated } from 'react-spring';
+import { useSpring, config } from 'react-spring';
 import { Switch, Button, variables } from '@trezor/components';
 import { useAnalytics, useActions } from '@suite-hooks';
 import { Translation } from '@suite-components';
 import * as onboardingActions from '@onboarding-actions/onboardingActions';
-
-const Wrapper = styled(animated.div)`
-    display: flex;
-    flex-direction: column;
-`;
+import { Box } from '@onboarding-components';
 
 const SwitchWrapper = styled.div`
     display: flex;
@@ -35,7 +31,7 @@ const DataAnalytics = () => {
     });
 
     return (
-        <Wrapper style={fadeStyles}>
+        <Box style={fadeStyles} variant="small">
             <SwitchWrapper>
                 <Switch
                     data-test="@analytics/toggle-switch"
@@ -57,7 +53,7 @@ const DataAnalytics = () => {
             >
                 <Translation id="TR_CONFIRM" />
             </Button>
-        </Wrapper>
+        </Box>
     );
 };
 

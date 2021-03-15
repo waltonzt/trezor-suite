@@ -12,7 +12,7 @@ import ButtonAlt from './Buttons/ButtonAlt';
 import ButtonCta from './Buttons/ButtonCta';
 import ButtonBack from './Buttons/ButtonBack';
 
-import Box from './Box/Box';
+import Box, { BoxProps } from './Box/Box';
 import ConnectDevicePrompt from './ConnectDevicePrompt';
 import WelcomeLayout from './Layouts/WelcomeLayout';
 import OnboardingLayout from './Layouts/OnboardingLayout';
@@ -49,3 +49,4 @@ export {
     WelcomeLayout,
     OnboardingLayout,
 };
+export type { BoxProps };
