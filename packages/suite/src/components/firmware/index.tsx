@@ -9,8 +9,11 @@ export { CheckSeedStep } from './CheckSeed';
 export { FirmwareProgressStep } from './FirmwareProgress';
 export { PartiallyDoneStep } from './PartiallyDone';
 export { DoneStep } from './Done';
+export { ReconnectDevicePrompt } from './ReconnectDevicePrompt';
 export { ReconnectInBootloaderStep } from './ReconnectInBootloader';
 export { ReconnectInNormalStep } from './ReconnectInNormal';
+export { FirmwareOffer } from './FirmwareOffer';
+export { NeueFirmwareProgressStep } from './NeueFirmwareProgressStep';
 
 // exception states components
 export { ErrorStep } from './Error';

@@ -141,6 +141,11 @@ export const getFwVersion = (device: AcquiredDevice) => {
     return `${features.major_version}.${features.minor_version}.${features.patch_version}`;
 };
 
+export const getFwUpdateVersion = (device: AcquiredDevice) => {
+    const version = device.firmwareRelease?.release.version;
+    return version ? version.join('.') : null;
+};
+
 /**
  * Generate new instance number
  * @param {TrezorDevice[]} devices

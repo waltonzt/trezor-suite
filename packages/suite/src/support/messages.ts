@@ -2293,6 +2293,10 @@ const definedMessages = defineMessages({
         description: 'Button. Skip one step',
         id: 'TR_SKIP',
     },
+    TR_SKIP_UPDATE: {
+        defaultMessage: 'Skip Update',
+        id: 'TR_SKIP_UPDATE',
+    },
     TR_SKIP_ALL: {
         defaultMessage: 'Skip onboarding',
         description: 'Button. Skip the entire onboarding process.',
@@ -3693,6 +3697,10 @@ const definedMessages = defineMessages({
     TR_RECONNECT_IN_BOOTLOADER: {
         id: 'TR_RECONNECT_IN_BOOTLOADER',
         defaultMessage: 'Reconnect your device in bootloader mode',
+    },
+    TR_RECONNECT_IN_BOOTLOADER_SUCCESS: {
+        id: 'TR_RECONNECT_IN_BOOTLOADER_SUCCESS',
+        defaultMessage: 'Device is now ready',
     },
     TR_LEAVE_BOOTLOADER_MODE: {
         id: 'TR_LEAVE_BOOTLOADER_MODE',
@@ -5457,6 +5465,14 @@ const definedMessages = defineMessages({
     TR_ONBOARDING_STEP_COINS: {
         id: 'TR_ONBOARDING_STEP_COINS',
         defaultMessage: 'Coins',
+    },
+    TR_ONBOARDING_CURRENT_VERSION: {
+        id: 'TR_ONBOARDING_CURRENT_VERSION',
+        defaultMessage: 'Current Version',
+    },
+    TR_ONBOARDING_NEW_VERSION: {
+        id: 'TR_ONBOARDING_NEW_VERSION',
+        defaultMessage: 'New Version',
     },
 } as const);
 
