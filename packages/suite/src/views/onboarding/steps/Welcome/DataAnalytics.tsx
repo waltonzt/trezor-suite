@@ -2,9 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { useSpring, config } from 'react-spring';
 import { Switch, Button, variables } from '@trezor/components';
-import { useAnalytics, useActions } from '@suite-hooks';
+import { useAnalytics, useOnboarding } from '@suite-hooks';
 import { Translation } from '@suite-components';
-import * as onboardingActions from '@onboarding-actions/onboardingActions';
 import { Box } from '@onboarding-components';
 
 const SwitchWrapper = styled.div`
@@ -20,10 +19,7 @@ const Label = styled.span`
 
 const DataAnalytics = () => {
     const { enable, dispose, enabled } = useAnalytics();
-    const { goToNextStep, goToSubStep } = useActions({
-        goToNextStep: onboardingActions.goToNextStep,
-        goToSubStep: onboardingActions.goToSubStep,
-    });
+    const { goToSubStep } = useOnboarding();
     const fadeStyles = useSpring({
         config: { ...config.default },
         from: { opacity: 0 },
