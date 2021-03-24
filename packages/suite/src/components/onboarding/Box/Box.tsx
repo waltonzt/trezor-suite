@@ -46,10 +46,15 @@ const Heading = styled(H1)<{ withDescription?: boolean }>`
     text-align: center;
 `;
 
-const Description = styled.div`
+const Description = styled.div<{ hasChildren?: boolean }>`
     padding: 0px 60px 36px 60px;
     text-align: center;
-    border-bottom: 1px solid ${props => props.theme.STROKE_GREY};
+
+    ${props =>
+        props.hasChildren &&
+        css`
+            border-bottom: 1px solid ${props => props.theme.STROKE_GREY};
+        `}
 
     @media only screen and (max-width: ${variables.SCREEN_SIZE.MD}) {
         padding: 0px 0px 36px 0px;
@@ -77,7 +82,7 @@ const Box = ({
         <BoxWrapper variant={variant} withImage={!!image} className={className} {...rest}>
             {heading && <Heading withDescription={!!description}>{heading}</Heading>}
             {description && (
-                <Description>
+                <Description hasChildren={!!children}>
                     <Text>{description}</Text>
                 </Description>
             )}
@@ -86,6 +91,9 @@ const Box = ({
                     <Image width={100} height={100} image={image} />
                 </BoxImageWrapper>
             )}
+            {console.log('children', !!children)}
+            {console.log('children', children)}
+            {console.log('children', React.Children.count(children))}
             <ChildrenWrapper>{children}</ChildrenWrapper>
         </BoxWrapper>
     );
