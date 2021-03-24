@@ -3,7 +3,7 @@ import { ConfirmOnDevice, Button } from '@trezor/components';
 import { getTextForStatus, getDescriptionForStatus } from '@firmware-utils';
 import { Translation } from '@suite-components';
 import { useDevice, useFirmware, useOnboarding } from '@suite-hooks';
-import { P, FirmwareOffer, ReconnectDevicePrompt, FirmwareStepBox } from '@firmware-components';
+import { P, FirmwareOffer, ReconnectDevicePrompt, OnboardingStepBox } from '@firmware-components';
 import { getFwUpdateVersion, getFwVersion } from '@suite-utils/device';
 import { AcquiredDevice } from '@suite-types';
 import ProgressBar from './ProgressBar';
@@ -29,7 +29,7 @@ const FirmwareInstallation = ({ cachedDevice }: Props) => {
                     requestedMode="normal"
                 />
             )}
-            <FirmwareStepBox
+            <OnboardingStepBox
                 heading={<Translation id="TR_INSTALL_FIRMWARE" />}
                 // innerActions={content.innerActions}
                 // outerActions={content.outerActions}
@@ -79,7 +79,7 @@ const FirmwareInstallation = ({ cachedDevice }: Props) => {
                         )}
                     </>
                 )}
-            </FirmwareStepBox>
+            </OnboardingStepBox>
         </>
     );
 };

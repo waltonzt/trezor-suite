@@ -9,7 +9,7 @@ import {
     ReconnectDevicePrompt,
     InstallButton,
     FirmwareOffer,
-    FirmwareStepBox,
+    OnboardingStepBox,
 } from '@firmware-components';
 import * as onboardingActions from '@onboarding-actions/onboardingActions';
 import { AcquiredDevice } from '@suite/types/suite';
@@ -122,7 +122,7 @@ const FirmwareInitial = ({ cachedDevice, setCachedDevice }: Props) => {
                     />
                 )}
 
-                <FirmwareStepBox
+                <OnboardingStepBox
                     heading={content.heading}
                     description={content.description}
                     innerActions={content.innerActions}
@@ -152,7 +152,7 @@ const FirmwareInitial = ({ cachedDevice, setCachedDevice }: Props) => {
                     </OnboardingButton.Back>
                     )}
                 </Wrapper.StepFooter> */}
-                </FirmwareStepBox>
+                </OnboardingStepBox>
             </>
         );
     }

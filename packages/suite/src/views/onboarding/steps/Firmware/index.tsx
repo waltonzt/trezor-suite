@@ -9,7 +9,7 @@ import {
     RetryButton,
     ErrorImg,
     FirmwareInstallation,
-    FirmwareStepBox,
+    OnboardingStepBox,
     FirmwareInitial,
 } from '@firmware-components';
 import { useSelector, useActions } from '@suite-hooks';
@@ -39,7 +39,7 @@ const FirmwareStep = () => {
         if (firmware.error) {
             return {
                 Body: (
-                    <FirmwareStepBox
+                    <OnboardingStepBox
                         heading={<Translation id="TR_FW_INSTALLATION_FAILED" />}
                         description={
                             <Translation
@@ -50,7 +50,7 @@ const FirmwareStep = () => {
                         innerActions={<RetryButton onClick={firmwareUpdate} />}
                     >
                         <ErrorImg />
-                    </FirmwareStepBox>
+                    </OnboardingStepBox>
                 ),
             };
         }
@@ -59,7 +59,7 @@ const FirmwareStep = () => {
         if (firmware.status !== 'done' && device?.firmware === 'valid') {
             return {
                 Body: (
-                    <FirmwareStepBox
+                    <OnboardingStepBox
                         heading={<Translation id="TR_FIRMWARE_IS_UP_TO_DATE" />}
                         description={
                             <Translation

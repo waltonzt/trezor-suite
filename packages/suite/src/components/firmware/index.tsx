@@ -14,7 +14,7 @@ export { ReconnectInBootloaderStep } from './ReconnectInBootloader';
 export { ReconnectInNormalStep } from './ReconnectInNormal';
 export { FirmwareOffer } from './FirmwareOffer';
 export { FirmwareInstallation } from './FirmwareInstallation';
-export { FirmwareStepBox } from './FirmwareStepBox';
+export { OnboardingStepBox } from './OnboardingStepBox';
 export { FirmwareInitial } from './FirmwareInitial';
 
 // exception states components

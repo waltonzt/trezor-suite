@@ -26,9 +26,10 @@ interface Props extends BoxProps {
     confirmOnDevice?: React.ReactNode;
 }
 
-const FirmwareStepBox = ({
+const OnboardingStepBox = ({
     heading,
     description,
+    image,
     innerActions,
     outerActions,
     confirmOnDevice,
@@ -41,8 +42,8 @@ const FirmwareStepBox = ({
             <Backdrop show={!!confirmOnDevice} animated zIndex={0} />
             {confirmOnDevice && <ConfirmWrapper>{confirmOnDevice}</ConfirmWrapper>}
             <Box
-                image="RECOVER_FROM_SEED"
-                heading={heading ?? <Translation id="TR_FIRMWARE_UPDATE" />}
+                image={image ?? 'RECOVER_FROM_SEED'}
+                heading={heading}
                 description={description}
                 {...rest}
             >
@@ -58,5 +59,5 @@ const FirmwareStepBox = ({
     );
 };
 
-export default FirmwareStepBox;
-export { FirmwareStepBox };
+export default OnboardingStepBox;
+export { OnboardingStepBox };
