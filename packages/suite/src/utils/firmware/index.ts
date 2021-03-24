@@ -13,15 +13,15 @@ export const getFormattedFingerprint = (fingerprint: string) => {
 
 export const getTextForStatus = (status: AppState['firmware']['status']) => {
     switch (status) {
-        case 'waiting-for-confirmation':
-            return 'TR_WAITING_FOR_CONFIRMATION';
         case 'started':
         case 'installing':
             return 'TR_INSTALLING';
-        case 'wait-for-reboot':
-            return 'TR_WAIT_FOR_REBOOT';
         case 'unplug':
-            return 'TR_DISCONNECT_YOUR_DEVICE';
+        case 'reconnect-in-normal':
+        case 'done':
+        case 'partially-done':
+        case 'wait-for-reboot':
+            return 'TR_FIRMWARE_STATUS_INSTALLATION_COMPLETED';
         default:
             return null;
     }

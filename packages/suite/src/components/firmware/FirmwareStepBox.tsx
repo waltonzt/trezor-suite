@@ -46,8 +46,12 @@ const FirmwareStepBox = ({
                 description={description}
                 {...rest}
             >
-                {children}
-                {innerActions && <InnerActions>{innerActions}</InnerActions>}
+                {(children || innerActions) && (
+                    <>
+                        {children}
+                        {innerActions && <InnerActions>{innerActions}</InnerActions>}
+                    </>
+                )}
             </Box>
             {outerActions && <OuterActions>{outerActions}</OuterActions>}
         </>
@@ -55,3 +59,4 @@ const FirmwareStepBox = ({
 };
 
 export default FirmwareStepBox;
+export { FirmwareStepBox };

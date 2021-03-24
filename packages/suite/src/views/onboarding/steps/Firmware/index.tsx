@@ -1,27 +1,22 @@
 import React, { useMemo, useState } from 'react';
 
-import { OnboardingButton, Wrapper, OnboardingLayout, Box } from '@onboarding-components';
+import { OnboardingLayout } from '@onboarding-components';
 import { Translation } from '@suite-components';
 import {
     CheckSeedStep,
-    FirmwareProgressStep,
     PartiallyDoneStep,
-    DoneStep,
-    ErrorStep,
-    ReconnectInBootloaderStep,
-    ReconnectInNormalStep,
-    NoNewFirmware,
-    OnboardingInitialStep,
     ContinueButton,
     RetryButton,
     ErrorImg,
-    NeueFirmwareProgressStep,
+    FirmwareInstallation,
+    FirmwareStepBox,
+    FirmwareInitial,
 } from '@firmware-components';
-import NeueOnboardingInitialStep from '@firmware-components/NeueOnboardingInitial';
 import { useSelector, useActions } from '@suite-hooks';
 import * as onboardingActions from '@onboarding-actions/onboardingActions';
-import * as firmwareActions from '@suite/actions/firmware/firmwareActions';
-import FirmwareStepBox from './components/FirmwareStepBox';
+import * as firmwareActions from '@firmware-actions/firmwareActions';
+import { AcquiredDevice } from '@suite-types';
+import { getFwVersion } from '@suite-utils/device';
 
 const FirmwareStep = () => {
     const { device, firmware } = useSelector(state => ({
@@ -29,15 +24,14 @@ const FirmwareStep = () => {
         firmware: state.firmware,
     }));
 
-    const { goToNextStep, goToPreviousStep, resetReducer, firmwareUpdate } = useActions({
+    const { goToNextStep, resetReducer, firmwareUpdate } = useActions({
         goToNextStep: onboardingActions.goToNextStep,
         goToPreviousStep: onboardingActions.goToPreviousStep,
         resetReducer: firmwareActions.resetReducer,
         firmwareUpdate: firmwareActions.firmwareUpdate,
     });
 
-    // Device, while in bootloader mode, doesn’t report its fw version, only bootloader version. We'll save fw version in local state
-    const [cachedCurrentFwVersion, setCachedCurrentFwVersion] = useState();
+    const [cachedDevice, setCachedDevice] = useState<AcquiredDevice>(device as AcquiredDevice);
 
     // TODO: useless memo?
     const Component = useMemo(() => {
@@ -64,8 +58,18 @@ const FirmwareStep = () => {
         // // edge case 2 - user has reconnected device that is already up to date
         if (firmware.status !== 'done' && device?.firmware === 'valid') {
             return {
-                Body: <NoNewFirmware.Body />,
-                BottomBar: <ContinueButton onClick={() => goToNextStep()} />,
+                Body: (
+                    <FirmwareStepBox
+                        heading={<Translation id="TR_FIRMWARE_IS_UP_TO_DATE" />}
+                        description={
+                            <Translation
+                                id="TR_FIRMWARE_INSTALLED_TEXT"
+                                values={{ version: getFwVersion(device) }}
+                            />
+                        }
+                        outerActions={<ContinueButton onClick={() => goToNextStep()} />}
+                    />
+                ),
             };
         }
 
@@ -75,8 +79,9 @@ const FirmwareStep = () => {
             case 'waiting-for-bootloader': // waiting for user to reconnect in bootloader
                 return {
                     Body: (
-                        <NeueOnboardingInitialStep
-                            setCachedCurrentFwVersion={setCachedCurrentFwVersion}
+                        <FirmwareInitial
+                            cachedDevice={cachedDevice}
+                            setCachedDevice={setCachedDevice}
                         />
                     ),
                 };
@@ -91,34 +96,30 @@ const FirmwareStep = () => {
             case 'installing':
             case 'wait-for-reboot':
             case 'unplug':
-                return {
-                    Body: (
-                        <NeueFirmwareProgressStep cachedCurrentFwVersion={cachedCurrentFwVersion} />
-                    ),
-                };
             case 'reconnect-in-normal':
+            case 'done':
                 return {
-                    Body: <ReconnectInNormalStep.Body />,
-                    BottomBar: <ReconnectInNormalStep.BottomBar />,
+                    Body: <FirmwareInstallation cachedDevice={cachedDevice} />,
                 };
+
             case 'partially-done':
                 return {
                     Body: <PartiallyDoneStep.Body />,
                     BottomBar: <ContinueButton onClick={resetReducer} />,
                 };
-            case 'done':
-                return {
-                    Body: <DoneStep.Body />,
-                    BottomBar: <ContinueButton onClick={() => goToNextStep()} />,
-                };
+            // case 'done':
+            //     return {
+            //         Body: <DoneStep.Body />,
+            //         BottomBar: <ContinueButton onClick={() => goToNextStep()} />,
+            //     };
 
             default:
                 // 'ensure' type completeness
                 throw new Error(`state "${firmware.status}" is not handled here`);
         }
     }, [
-        cachedCurrentFwVersion,
-        device?.firmware,
+        cachedDevice,
+        device,
         firmware.error,
         firmware.status,
         firmwareUpdate,

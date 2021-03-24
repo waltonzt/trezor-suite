@@ -99,75 +99,119 @@ const Heading = styled(H1)`
     font-weight: ${variables.FONT_WEIGHT.DEMI_BOLD};
 `;
 
+const getTextForMode = (requestedMode: 'bootloader' | 'normal', deviceVersion: number) => {
+    const text = {
+        bootloader: {
+            headingStart: <Translation id="TR_RECONNECT_IN_BOOTLOADER" />,
+            headingSuccess: <Translation id="TR_RECONNECT_IN_BOOTLOADER_SUCCESS" />,
+            steps: [
+                {
+                    label: <Translation id="TR_DISCONNECT_YOUR_DEVICE" />,
+                },
+                {
+                    label:
+                        deviceVersion === 1 ? (
+                            <Translation id="TR_HOLD_LEFT_BUTTON" />
+                        ) : (
+                            <Translation id="TR_SWIPE_YOUR_FINGERS" />
+                        ),
+                },
+            ],
+        },
+        normal: {
+            headingStart: <Translation id="TR_RECONNECT_IN_NORMAL" />,
+            headingSuccess: <Translation id="TR_RECONNECT_IN_NORMAL_SUCCESS" />,
+            steps: [
+                {
+                    label: <Translation id="TR_DISCONNECT_YOUR_DEVICE" />,
+                },
+                {
+                    label:
+                        deviceVersion === 1 ? (
+                            <Translation id="FIRMWARE_CONNECT_IN_NORMAL_MODEL_1" />
+                        ) : (
+                            <Translation id="FIRMWARE_CONNECT_IN_NORMAL_MODEL_2" />
+                        ),
+                },
+            ],
+        },
+    };
+    return text[requestedMode];
+};
 interface Props {
     deviceVersion: number;
+    requestedMode: 'bootloader' | 'normal';
 }
 
-const ReconnectDevicePrompt = ({ deviceVersion }: Props) => {
+const ReconnectDevicePrompt = ({ deviceVersion, requestedMode }: Props) => {
     const { device } = useDevice();
     const { firmwareUpdate } = useFirmware();
     const transport = useSelector(state => state.suite.transport);
 
-    const activeStep = device?.connected ? 1 : 2; // 1: disconnect device, 2: instructions to reconnect in bootloader
+    const activeStep = device?.connected ? 0 : 1; // 0: disconnect device, 1: instructions to reconnect in bootloader
     const showWebUSB = !device?.connected && isWebUSB(transport);
+    const isStepActive = (num: number) => activeStep === num;
+    const text = getTextForMode(requestedMode, deviceVersion);
 
     // Either the device is connect and in bl mode OR
-    // TODO: special case where device isn't reporting bootloader mode, but it is already in it, but this condition seems like BS (returns tru in bl mode for device with fw, but shiped devices are withoout fw, right? why would it be trues)
+    // TODO: special case where device isn't reporting bootloader mode, but it is already in it. VERIFY
     const reconnectedInBootloader =
-        (device?.connected && device?.mode === 'bootloader') || device?.features?.firmware_present;
+        device?.connected &&
+        (device?.mode === 'bootloader' || device?.features?.firmware_present !== null);
 
-    const isStepActive = (num: number) => activeStep === num;
+    const reconnectedInNormal = device?.connected && device?.mode === 'normal';
+    const reconnectedInRequestedMode =
+        requestedMode === 'bootloader' ? reconnectedInBootloader : reconnectedInNormal;
+
+    const successAction =
+        requestedMode === 'bootloader' ? (
+            <Button onClick={firmwareUpdate} data-test="@firmware/install-button">
+                <Translation id="TR_INSTALL" />
+            </Button>
+        ) : (
+            <Button onClick={() => {}} data-test="@firmware/install-button">
+                <Translation id="TR_CONTINUE" />
+            </Button>
+        );
+
     return (
         <Overlay desktopBorder={isDesktop() && !isMac() ? DESKTOP_WRAPPER_BORDER_WIDTH : undefined}>
             <Wrapper>
                 <Img />
                 <Content>
                     <Heading>
-                        <Translation
-                            id={
-                                !reconnectedInBootloader
-                                    ? 'TR_RECONNECT_IN_BOOTLOADER'
-                                    : 'TR_RECONNECT_IN_BOOTLOADER_SUCCESS'
-                            }
-                        />
+                        {!reconnectedInRequestedMode ? text.headingStart : text.headingSuccess}
                     </Heading>
-                    {!reconnectedInBootloader ? (
-                        <>
-                            <BulletPointWrapper>
-                                <BulletPointNumber active={isStepActive(1)}>1</BulletPointNumber>
-                                <BulletPointText active={isStepActive(1)}>
-                                    <Translation id="TR_DISCONNECT_YOUR_DEVICE" />
-                                </BulletPointText>
-                            </BulletPointWrapper>
-                            <BulletPointWrapper>
-                                <BulletPointNumber active={isStepActive(2)}>2</BulletPointNumber>
-                                <BulletPointText active={isStepActive(2)}>
-                                    {deviceVersion === 1 ? (
-                                        <Translation id="TR_HOLD_LEFT_BUTTON" />
-                                    ) : (
-                                        <Translation id="TR_SWIPE_YOUR_FINGERS" />
-                                    )}
-                                </BulletPointText>
-                            </BulletPointWrapper>
-                            {isStepActive(2) && showWebUSB && (
-                                <WebusbButton ready>
-                                    <Button icon="PLUS" variant="primary">
-                                        <Translation id="TR_CHECK_FOR_DEVICES" />
-                                    </Button>
-                                </WebusbButton>
-                            )}
-                        </>
+                    {!reconnectedInRequestedMode ? (
+                        text.steps.map((step, i) => (
+                            <>
+                                {/* First step asks for disconnecting a device */}
+                                {/* Second step reconnect in normal mode or bootloader */}
+                                <BulletPointWrapper>
+                                    <BulletPointNumber active={isStepActive(i)}>
+                                        {i + 1}
+                                    </BulletPointNumber>
+                                    <BulletPointText active={isStepActive(i)}>
+                                        {step.label}
+                                    </BulletPointText>
+                                </BulletPointWrapper>
+                                {isStepActive(2) && showWebUSB && (
+                                    <WebusbButton ready>
+                                        <Button icon="PLUS" variant="primary">
+                                            <Translation id="TR_CHECK_FOR_DEVICES" />
+                                        </Button>
+                                    </WebusbButton>
+                                )}
+                            </>
+                        ))
                     ) : (
-                        <Bottom>
-                            <Button onClick={firmwareUpdate} data-test="@firmware/install-button">
-                                <Translation id="TR_INSTALL" />
-                            </Button>
-                        </Bottom>
+                        <Bottom>{successAction}</Bottom>
                     )}
                 </Content>
             </Wrapper>
         </Overlay>
     );
 };
+
 export default ReconnectDevicePrompt;
 export { ReconnectDevicePrompt };

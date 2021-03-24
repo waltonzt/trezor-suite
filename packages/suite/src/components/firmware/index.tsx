@@ -13,7 +13,9 @@ export { ReconnectDevicePrompt } from './ReconnectDevicePrompt';
 export { ReconnectInBootloaderStep } from './ReconnectInBootloader';
 export { ReconnectInNormalStep } from './ReconnectInNormal';
 export { FirmwareOffer } from './FirmwareOffer';
-export { NeueFirmwareProgressStep } from './NeueFirmwareProgressStep';
+export { FirmwareInstallation } from './FirmwareInstallation';
+export { FirmwareStepBox } from './FirmwareStepBox';
+export { FirmwareInitial } from './FirmwareInitial';
 
 // exception states components
 export { ErrorStep } from './Error';

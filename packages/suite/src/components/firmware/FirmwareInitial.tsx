@@ -1,80 +1,43 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { Button, ConfirmOnDevice, Icon, variables } from '@trezor/components';
+import { Button, ConfirmOnDevice, variables } from '@trezor/components';
 import { Translation } from '@suite-components';
 import { getFwUpdateVersion, getFwVersion } from '@suite-utils/device';
 import { useDevice, useFirmware, useActions } from '@suite-hooks';
 import {
-    P,
     ReconnectInNormalStep,
     ReconnectDevicePrompt,
     InstallButton,
     FirmwareOffer,
+    FirmwareStepBox,
 } from '@firmware-components';
 import * as onboardingActions from '@onboarding-actions/onboardingActions';
-import FirmwareStepBox from '@suite/views/onboarding/steps/Firmware/components/FirmwareStepBox';
-
-const FwVersionWrapper = styled.div`
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-    padding: 16px 0px;
-    border-bottom: 1px solid ${props => props.theme.STROKE_GREY};
-`;
-
-const FwVersion = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-`;
-
-const Version = styled.span<{ new?: boolean }>`
-    color: ${props => (props.new ? props.theme.TYPE_GREEN : props.theme.TYPE_LIGHT_GREY)};
-    font-size: ${variables.FONT_SIZE.SMALL};
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    font-variant-numeric: tabular-nums;
-    margin-top: 6px;
-`;
-
-const Label = styled(Version)`
-    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
-    font-size: ${variables.FONT_SIZE.TINY};
-`;
-
-const IconWrapper = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0px 80px;
-`;
+import { AcquiredDevice } from '@suite/types/suite';
 
 interface Props {
-    setCachedCurrentFwVersion: React.Dispatch<SetStateAction<string>>;
+    cachedDevice: AcquiredDevice;
+    setCachedDevice: React.Dispatch<React.SetStateAction<AcquiredDevice>>;
 }
 
-const NeueOnboardingInitial = ({ setCachedCurrentFwVersion }: Props) => {
+const FirmwareInitial = ({ cachedDevice, setCachedDevice }: Props) => {
     const { device: liveDevice } = useDevice();
     const { setStatus, firmwareUpdate, status } = useFirmware();
     const { goToNextStep } = useActions({
         goToNextStep: onboardingActions.goToNextStep,
     });
-    const [cachedDevice, setCachedDevice] = useState(liveDevice);
-
     useEffect(() => {
         // When user choses to install a new firmware update we will ask him/her to reconnect a device in bootloader mode.
         // This prompt (to reconnect a device in bootloader mode) is shown in modal which is visually layer above the content.
         // In order to preserve the background content (screen with fw update offer) in case
         // when user disconnects the device and reconnect it in bl mode we are caching the device.
         // (Device in BL mode doesn't provide us all the details and we don't want any flickering o reacting in general while user is just following our instructions)
-        if (liveDevice?.connected && liveDevice?.mode !== 'bootloader') {
+        if (liveDevice?.connected && liveDevice?.mode !== 'bootloader' && liveDevice.features) {
+            // if (liveDevice.id !== cachedDevice.id)  {
+            //     // store device once and don't refresh it on potentional changes
+            // }
             setCachedDevice(liveDevice);
-            if (liveDevice.features) {
-                setCachedCurrentFwVersion(getFwVersion(liveDevice));
-            }
         }
-    }, [liveDevice, setCachedCurrentFwVersion]);
+    }, [cachedDevice.id, liveDevice, setCachedDevice]);
 
     // User is following instructions for disconnecting/reconnecting a device in bootloader mode; We'll use cached version of the device
     const device = status === 'waiting-for-bootloader' ? cachedDevice : liveDevice;
@@ -89,9 +52,16 @@ const NeueOnboardingInitial = ({ setCachedCurrentFwVersion }: Props) => {
         };
     } else if (device.firmware === 'none') {
         // No firmware installed
+        // TODO: Question: Is such device already in bootloader mode or why do we skip request to reconnect in bootloader?
         content = {
             heading: <Translation id="TR_INSTALL_FIRMWARE" />,
             description: <Translation id="TR_FIRMWARE_SUBHEADING" />,
+            body: (
+                <FirmwareOffer
+                    newVersion={getFwUpdateVersion(cachedDevice)}
+                    releaseChangelog={cachedDevice.firmwareRelease}
+                />
+            ),
             innerActions: <InstallButton onClick={firmwareUpdate} />,
         };
     } else if (device.mode === 'bootloader') {
@@ -114,6 +84,7 @@ const NeueOnboardingInitial = ({ setCachedCurrentFwVersion }: Props) => {
                 <FirmwareOffer
                     currentVersion={getFwVersion(device)}
                     newVersion={getFwUpdateVersion(device)}
+                    releaseChangelog={device?.firmwareRelease}
                 />
             ),
             innerActions: (
@@ -145,7 +116,10 @@ const NeueOnboardingInitial = ({ setCachedCurrentFwVersion }: Props) => {
             <>
                 {/* Modal above a fw update offer. Instructs user to reconnect the device in bootloader */}
                 {status === 'waiting-for-bootloader' && (
-                    <ReconnectDevicePrompt deviceVersion={expectedModel} />
+                    <ReconnectDevicePrompt
+                        deviceVersion={expectedModel}
+                        requestedMode="bootloader"
+                    />
                 )}
 
                 <FirmwareStepBox
@@ -185,4 +159,4 @@ const NeueOnboardingInitial = ({ setCachedCurrentFwVersion }: Props) => {
     return null;
 };
 
-export default NeueOnboardingInitial;
+export { FirmwareInitial };
