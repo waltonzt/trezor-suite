@@ -8,6 +8,7 @@ const ProgressBarWrapper = styled.div`
     padding: 20px 0;
     margin: 50px;
     width: 100%;
+    height: 64px; // prevents jumping in completed state with check mark icon shown
     justify-content: space-between;
     align-items: center;
 `;
