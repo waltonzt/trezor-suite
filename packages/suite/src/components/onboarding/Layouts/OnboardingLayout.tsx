@@ -45,9 +45,10 @@ const Content = styled.div`
 
 interface Props {
     children: React.ReactNode;
+    activeStep: number;
 }
 
-const OnboardingLayout = ({ children }: Props) => {
+const OnboardingLayout = ({ children, activeStep }: Props) => {
     return (
         <Wrapper>
             <MaxWidth>
@@ -84,7 +85,7 @@ const OnboardingLayout = ({ children }: Props) => {
                             },
                         ]}
                         // TODO
-                        activeStep={0}
+                        activeStep={activeStep}
                     />
                     {children}
                 </Content>

@@ -128,7 +128,7 @@ const FirmwareStep = () => {
     ]);
 
     return (
-        <OnboardingLayout>
+        <OnboardingLayout activeStep={0}>
             {Component.Body}
 
             {/* Back button for initial case and in case of error */}
