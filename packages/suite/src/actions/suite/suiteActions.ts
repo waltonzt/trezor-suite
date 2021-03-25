@@ -68,6 +68,11 @@ export type SuiteAction =
           payload?: string;
       }
     | {
+          type: typeof SUITE.REMOVE_BUTTON_REQUEST;
+          device: TrezorDevice | undefined;
+          payload: string;
+      }
+    | {
           type: typeof SUITE.SET_PROCESS_MODE;
           device: TrezorDevice;
           payload: TrezorDevice['processMode'];
@@ -342,6 +347,7 @@ const actions = [
     SUITE.RECEIVE_AUTH_CONFIRM,
     SUITE.UPDATE_PASSPHRASE_MODE,
     SUITE.ADD_BUTTON_REQUEST,
+    SUITE.REMOVE_BUTTON_REQUEST,
     SUITE.REMEMBER_DEVICE,
     SUITE.FORGET_DEVICE,
     SUITE.SET_PROCESS_MODE,
@@ -561,7 +567,7 @@ export const setInitialTheme = () => async (dispatch: Dispatch, getState: GetSta
             // set initial theme (light/dark) based on OS settings
             const osThemeVariant = getOSTheme();
             if (osThemeVariant !== currentThemeVariant) {
-                dispatch(setTheme(osThemeVariant, undefined));
+                dispatch(setTheme('light', undefined));
             }
         } else if (savedTheme && savedTheme.variant !== currentThemeVariant) {
             // set correct theme from the db (this will be a bit quicker than waiting for STORAGE.LOADED)

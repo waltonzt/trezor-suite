@@ -58,6 +58,25 @@ const buttonRequest = (api: MiddlewareAPI<Dispatch, AppState>) => (next: Dispatc
             }
 
             break;
+        case UI.CLOSE_UI_WINDOW: {
+            const state = api.getState();
+            const deviceVersion = state.suite.device?.features?.major_version ?? 2;
+            if (state.router.app === 'onboarding') {
+                // experimental feature for removing buttonRequests from device, tested only in onboarding
+
+                // User confirmed/cancelled seed creation (T1, T2 emit different button requests)
+                api.dispatch({
+                    type: SUITE.REMOVE_BUTTON_REQUEST,
+                    device: state.suite.device,
+                    payload:
+                        deviceVersion === 2
+                            ? 'ButtonRequest_ResetDevice'
+                            : 'ButtonRequest_ProtectCall',
+                });
+            }
+
+            break;
+        }
         default:
         // no default
     }
