@@ -53,7 +53,8 @@ const Description = styled.div<{ hasChildren?: boolean }>`
     ${props =>
         props.hasChildren &&
         css`
-            border-bottom: 1px solid ${props => props.theme.STROKE_GREY};
+            /* border-bottom: 1px solid ${props => props.theme.STROKE_GREY}; */
+            /* margin-bottom: 32px; */
         `}
 
     @media only screen and (max-width: ${variables.SCREEN_SIZE.MD}) {
