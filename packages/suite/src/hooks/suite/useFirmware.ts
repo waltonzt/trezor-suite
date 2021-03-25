@@ -8,6 +8,7 @@ export const useFirmware = () => {
         toggleHasSeed: firmwareActions.toggleHasSeed,
         setStatus: firmwareActions.setStatus,
         firmwareUpdate: firmwareActions.firmwareUpdate,
+        resetReducer: firmwareActions.resetReducer,
     });
 
     return {

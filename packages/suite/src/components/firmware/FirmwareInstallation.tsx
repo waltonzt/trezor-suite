@@ -13,16 +13,14 @@ interface Props {
 }
 const FirmwareInstallation = ({ cachedDevice }: Props) => {
     const { device } = useDevice();
-    const { status, installingProgress } = useFirmware();
+    const { status, installingProgress, resetReducer } = useFirmware();
     const { goToNextStep } = useOnboarding();
     const statusIntlId = getTextForStatus(status);
     const statusText = statusIntlId ? <Translation id={statusIntlId} /> : null;
-    const statusDescription = getDescriptionForStatus(status);
 
     return (
         <>
             {/* Modal to instruct user to disconnect the device and reconnect in normal mode */}
-            {/* TODO refactor ReconnectDevicePrompt component */}
             {(status === 'unplug' || status === 'reconnect-in-normal') && (
                 <ReconnectDevicePrompt
                     deviceVersion={cachedDevice?.features?.major_version || 2}
@@ -31,24 +29,21 @@ const FirmwareInstallation = ({ cachedDevice }: Props) => {
             )}
             <OnboardingStepBox
                 heading={<Translation id="TR_INSTALL_FIRMWARE" />}
-                // innerActions={content.innerActions}
-                // outerActions={content.outerActions}
                 confirmOnDevice={
                     status === 'waiting-for-confirmation' ? (
                         <ConfirmOnDevice
                             title={<Translation id="TR_CONFIRM_ON_TREZOR" />}
                             trezorModel={device?.features?.major_version === 1 ? 1 : 2}
-                            // successText={<Translation id="TR_CONFIRMED_TX" />}
-                            // onCancel={cancelSignTx}
                         />
                     ) : undefined
                 }
                 outerActions={
-                    status === 'done' ? (
+                    // Show continue button after the installation is completed
+                    status === 'done' || status === 'partially-done' ? (
                         // todo: this needs to be different action in separate fw flow
                         <Button
                             variant="primary"
-                            onClick={() => goToNextStep()}
+                            onClick={status === 'done' ? () => goToNextStep() : resetReducer}
                             data-test="@firmware/continue-button"
                         >
                             <Translation id="TR_CONTINUE" />
@@ -61,23 +56,15 @@ const FirmwareInstallation = ({ cachedDevice }: Props) => {
                     newVersion={getFwUpdateVersion(cachedDevice)}
                     releaseChangelog={cachedDevice.firmwareRelease}
                 />
-                {/* <ProgressBar label={statusText} total={100} current={10} maintainCompletedState /> */}
+
                 {status !== 'waiting-for-confirmation' && status !== 'started' && (
+                    // Progress bar shown only in 'installing', 'wait-for-reboot', 'unplug', 'reconnect-in-normal', 'done'
                     <ProgressBar
                         label={statusText}
                         total={100}
                         current={installingProgress || 0}
                         maintainCompletedState
                     />
-                )}
-                {statusText && (
-                    <>
-                        {statusDescription && (
-                            <P>
-                                <Translation id={statusDescription} />
-                            </P>
-                        )}
-                    </>
                 )}
             </OnboardingStepBox>
         </>
