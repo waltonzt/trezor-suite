@@ -1,9 +1,9 @@
 import React from 'react';
 import { ConfirmOnDevice, Button } from '@trezor/components';
-import { getTextForStatus, getDescriptionForStatus } from '@firmware-utils';
+import { getTextForStatus } from '@firmware-utils';
 import { Translation } from '@suite-components';
 import { useDevice, useFirmware, useOnboarding } from '@suite-hooks';
-import { P, FirmwareOffer, ReconnectDevicePrompt, OnboardingStepBox } from '@firmware-components';
+import { FirmwareOffer, ReconnectDevicePrompt, OnboardingStepBox } from '@firmware-components';
 import { getFwUpdateVersion, getFwVersion } from '@suite-utils/device';
 import { AcquiredDevice } from '@suite-types';
 import ProgressBar from './ProgressBar';
