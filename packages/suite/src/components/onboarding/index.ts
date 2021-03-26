@@ -1,4 +1,5 @@
 import Option from './Option';
+import NeueOption from './NeueOption';
 import Text from './Text';
 
 import ControlsWrapper from './Wrapper/ControlsWrapper';
@@ -30,6 +31,7 @@ const Loaders = {
 };
 
 const Wrapper = {
+    // TODO: remove what we don't need anymore
     Controls: ControlsWrapper,
     Options: OptionsWrapper,
     StepBody: StepBodyWrapper,
@@ -38,12 +40,14 @@ const Wrapper = {
     Step: StepWrapper,
 };
 
+// TODO: remove what we don't need anymore
 export {
     OnboardingButton,
     Loaders,
     Text,
     Wrapper,
     Option,
+    NeueOption,
     Box,
     ConnectDevicePrompt,
     WelcomeLayout,

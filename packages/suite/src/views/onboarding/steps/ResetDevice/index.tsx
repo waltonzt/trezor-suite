@@ -1,13 +1,30 @@
 import React from 'react';
-import { Link } from '@trezor/components';
+import { variables } from '@trezor/components';
 import * as STEP from '@onboarding-constants/steps';
-import { Wrapper, Text, Option, OnboardingButton } from '@onboarding-components';
+import { OnboardingButton, NeueOption, OnboardingLayout } from '@onboarding-components';
 import { Translation } from '@suite-components';
-import { SuccessImg, H2, P } from '@firmware-components';
-import { TOS_URL } from '@suite-constants/urls';
+import { OnboardingStepBox } from '@firmware-components';
 import { useActions, useSelector } from '@suite-hooks';
 import * as deviceSettingsActions from '@settings-actions/deviceSettingsActions';
 import * as onboardingActions from '@onboarding-actions/onboardingActions';
+import styled from 'styled-components';
+
+const OptionsWrapper = styled.div`
+    display: flex;
+
+    @media all and (max-width: ${variables.SCREEN_SIZE.SM}) {
+        flex-direction: column;
+    }
+`;
+
+const OptionWrapper = styled.div`
+    display: flex;
+    width: 100%;
+`;
+
+const Divider = styled.div`
+    flex: 0 0 24px;
+`;
 
 const ResetDeviceStep = () => {
     const { resetDevice, goToPreviousStep, callActionAndGoToNextStep } = useActions({
@@ -22,104 +39,77 @@ const ResetDeviceStep = () => {
         return null;
     }
 
-    const isShamirBackupAvailable = () => {
-        return device.features?.capabilities?.includes('Capability_Shamir');
-    };
+    const isShamirBackupAvailable = device.features?.capabilities?.includes('Capability_Shamir');
+    const isWaitingForConfirmation = device.buttonRequests.some(
+        r => r === 'ButtonRequest_ResetDevice' || r === 'ButtonRequest_ProtectCall',
+    );
 
     return (
-        <Wrapper.Step>
-            <Wrapper.StepHeading>
-                {isShamirBackupAvailable() && <Translation id="TR_BACKUP_TYPE" />}
-            </Wrapper.StepHeading>
-            <Wrapper.StepBody>
-                {!isShamirBackupAvailable() && (
-                    <>
-                        <SuccessImg model={device.features.major_version || 2} />
-                        <H2>
-                            <Translation id="TR_CREATE_WALLET" />
-                        </H2>
-                    </>
-                )}
-
-                {isShamirBackupAvailable() && (
-                    <Text>
-                        <Translation id="TR_YOU_MAY_CHOSE_EITHER_STANDARD" />
-                    </Text>
-                )}
-
-                <P>
-                    <Translation
-                        id="TR_BY_CREATING_WALLET"
-                        values={{
-                            TERMS_AND_CONDITIONS: (
-                                <Link href={TOS_URL}>
-                                    <Translation id="TERMS_AND_CONDTIONS" />
-                                </Link>
-                            ),
-                        }}
-                    />
-                </P>
-                {isShamirBackupAvailable() && (
-                    <Wrapper.Options>
-                        <Option
-                            data-test="@onboarding/button-standard-backup"
-                            action={() => {
-                                callActionAndGoToNextStep(
-                                    // eslint-disable-next-line @typescript-eslint/naming-convention
-                                    () => resetDevice({ backup_type: 0 }),
-                                    STEP.ID_SECURITY_STEP,
-                                );
-                            }}
-                            title={<Translation id="SINGLE_SEED" />}
-                            text={<Translation id="SINGLE_SEED_DESCRIPTION" />}
-                            button={
-                                <Translation
-                                    id="TR_SELECT_SEED_TYPE"
-                                    values={{ seedType: <Translation id="SINGLE_SEED" /> }}
-                                />
-                            }
-                            imgSrc="images/svg/seed-card-single.svg"
-                        />
-
-                        <Option
-                            action={() => {
-                                callActionAndGoToNextStep(
-                                    // eslint-disable-next-line @typescript-eslint/naming-convention
-                                    () => resetDevice({ backup_type: 1 }),
-                                    STEP.ID_SECURITY_STEP,
-                                );
-                            }}
-                            title={<Translation id="SHAMIR_SEED" />}
-                            text={<Translation id="SHAMIR_SEED_DESCRIPTION" />}
-                            button={
-                                <Translation
-                                    id="TR_SELECT_SEED_TYPE"
-                                    values={{ seedType: <Translation id="SHAMIR_SEED" /> }}
-                                />
-                            }
-                            imgSrc="images/svg/seed-card-shamir.svg"
-                        />
-                    </Wrapper.Options>
-                )}
-                {!isShamirBackupAvailable() && (
-                    <Wrapper.Controls>
-                        <OnboardingButton.Cta
-                            data-test="@onboarding/only-backup-option-button"
-                            onClick={() =>
-                                callActionAndGoToNextStep(resetDevice, STEP.ID_SECURITY_STEP)
-                            }
-                        >
-                            <Translation id="TR_CREATE_WALLET" />
-                        </OnboardingButton.Cta>
-                    </Wrapper.Controls>
-                )}
-            </Wrapper.StepBody>
-            <Wrapper.StepFooter>
-                <OnboardingButton.Back onClick={() => goToPreviousStep()}>
-                    <Translation id="TR_BACK" />
-                </OnboardingButton.Back>
-            </Wrapper.StepFooter>
-        </Wrapper.Step>
+        <OnboardingLayout activeStep={1}>
+            <OnboardingStepBox
+                heading={<Translation id="TR_ONBOARDING_GENERATE_SEED" />}
+                description={<Translation id="TR_ONBOARDING_GENERATE_SEED_DESCRIPTION" />}
+                confirmOnDevice={
+                    isWaitingForConfirmation ? device?.features?.major_version : undefined
+                }
+                outerActions={
+                    <OnboardingButton.Back onClick={() => goToPreviousStep()}>
+                        <Translation id="TR_BACK" />
+                    </OnboardingButton.Back>
+                }
+            >
+                {!isWaitingForConfirmation ? (
+                    // Show options to chose from only if we are not waiting for confirmation on the device (because that means user has already chosen )
+                    <OptionsWrapper>
+                        <OptionWrapper>
+                            <NeueOption
+                                icon="REFRESH"
+                                data-test={
+                                    isShamirBackupAvailable
+                                        ? '@onboarding/button-standard-backup'
+                                        : '@onboarding/only-backup-option-button'
+                                }
+                                onClick={() => {
+                                    if (isShamirBackupAvailable) {
+                                        callActionAndGoToNextStep(
+                                            // eslint-disable-next-line @typescript-eslint/naming-convention
+                                            () => resetDevice({ backup_type: 0 }),
+                                            STEP.ID_SECURITY_STEP,
+                                        );
+                                    } else {
+                                        callActionAndGoToNextStep(
+                                            resetDevice,
+                                            STEP.ID_SECURITY_STEP,
+                                        );
+                                    }
+                                }}
+                                heading={<Translation id="SINGLE_SEED" />}
+                                description={<Translation id="SINGLE_SEED_DESCRIPTION" />}
+                            />
+                        </OptionWrapper>
+                        {isShamirBackupAvailable && (
+                            <>
+                                <Divider />
+                                <OptionWrapper>
+                                    <NeueOption
+                                        icon="REFRESH"
+                                        onClick={() => {
+                                            callActionAndGoToNextStep(
+                                                // eslint-disable-next-line @typescript-eslint/naming-convention
+                                                () => resetDevice({ backup_type: 1 }),
+                                                STEP.ID_SECURITY_STEP,
+                                            );
+                                        }}
+                                        heading={<Translation id="SHAMIR_SEED" />}
+                                        description={<Translation id="SHAMIR_SEED_DESCRIPTION" />}
+                                    />
+                                </OptionWrapper>
+                            </>
+                        )}
+                    </OptionsWrapper>
+                ) : undefined}
+            </OnboardingStepBox>
+        </OnboardingLayout>
     );
 };
 
