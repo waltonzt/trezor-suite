@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { ConfirmOnDevice } from '@trezor/components';
 import { Box, BoxProps } from '@onboarding-components';
 import { Backdrop, Translation } from '@suite-components';
 
@@ -23,7 +24,7 @@ const ConfirmWrapper = styled.div`
 interface Props extends BoxProps {
     innerActions?: React.ReactNode;
     outerActions?: React.ReactNode;
-    confirmOnDevice?: React.ReactNode;
+    confirmOnDevice?: number;
 }
 
 const OnboardingStepBox = ({
@@ -40,7 +41,16 @@ const OnboardingStepBox = ({
     return (
         <>
             <Backdrop show={!!confirmOnDevice} animated zIndex={0} />
-            {confirmOnDevice && <ConfirmWrapper>{confirmOnDevice}</ConfirmWrapper>}
+            {confirmOnDevice && (
+                <ConfirmWrapper>
+                    {typeof confirmOnDevice === 'number' ? (
+                        <ConfirmOnDevice
+                            title={<Translation id="TR_CONFIRM_ON_TREZOR" />}
+                            trezorModel={confirmOnDevice === 1 ? 1 : 2}
+                        />
+                    ) : undefined}
+                </ConfirmWrapper>
+            )}
             <Box
                 image={image ?? 'RECOVER_FROM_SEED'}
                 heading={heading}
@@ -61,3 +71,4 @@ const OnboardingStepBox = ({
 
 export default OnboardingStepBox;
 export { OnboardingStepBox };
+export type { Props as OnboardingStepBoxProps };

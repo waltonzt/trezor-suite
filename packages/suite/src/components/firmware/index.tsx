@@ -15,6 +15,7 @@ export { ReconnectInNormalStep } from './ReconnectInNormal';
 export { FirmwareOffer } from './FirmwareOffer';
 export { FirmwareInstallation } from './FirmwareInstallation';
 export { OnboardingStepBox } from './OnboardingStepBox';
+export type { OnboardingStepBoxProps } from './OnboardingStepBox';
 export { FirmwareInitial } from './FirmwareInitial';
 
 // exception states components

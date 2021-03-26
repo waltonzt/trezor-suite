@@ -30,12 +30,9 @@ const FirmwareInstallation = ({ cachedDevice }: Props) => {
             <OnboardingStepBox
                 heading={<Translation id="TR_INSTALL_FIRMWARE" />}
                 confirmOnDevice={
-                    status === 'waiting-for-confirmation' ? (
-                        <ConfirmOnDevice
-                            title={<Translation id="TR_CONFIRM_ON_TREZOR" />}
-                            trezorModel={device?.features?.major_version === 1 ? 1 : 2}
-                        />
-                    ) : undefined
+                    status === 'waiting-for-confirmation'
+                        ? device?.features?.major_version
+                        : undefined
                 }
                 outerActions={
                     // Show continue button after the installation is completed

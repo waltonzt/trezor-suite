@@ -128,14 +128,9 @@ const FirmwareInitial = ({ cachedDevice, setCachedDevice }: Props) => {
                     innerActions={content.innerActions}
                     outerActions={content.outerActions}
                     confirmOnDevice={
-                        status === 'waiting-for-confirmation' ? (
-                            <ConfirmOnDevice
-                                title={<Translation id="TR_CONFIRM_ON_TREZOR" />}
-                                trezorModel={device?.features?.major_version === 1 ? 1 : 2}
-                                // successText={<Translation id="TR_CONFIRMED_TX" />}
-                                // onCancel={cancelSignTx}
-                            />
-                        ) : undefined
+                        status === 'waiting-for-confirmation'
+                            ? device?.features?.major_version
+                            : undefined
                     }
                 >
                     {content.body}
