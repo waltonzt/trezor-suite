@@ -19,12 +19,13 @@ import ErrorBoundary from '@suite-support/ErrorBoundary';
 import RouterHandler from '@suite-support/Router';
 import ThemeProvider from '@suite-support/ThemeProvider';
 import history from '@suite/support/history';
+import { isEnabled } from '@suite-utils/features';
 
 import AppRouter from './support/Router';
 import { CypressExportStore } from './support/CypressExportStore';
 import GlobalStyles from '@suite-support/styles/global';
 
-if ('serviceWorker' in navigator) {
+if ('serviceWorker' in navigator && isEnabled('PWA')) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register(`${process.env.assetPrefix}/sw.js`);
     });

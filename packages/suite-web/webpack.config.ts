@@ -1,17 +1,21 @@
 /* eslint-disable */
-const path = require('path');
-const { execSync } = require('child_process');
-const webpack = require('webpack');
-const CopyPlugin = require("copy-webpack-plugin");
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
-const WorkboxPlugin = require('workbox-webpack-plugin');
+import path from 'path';
+import { execSync } from 'child_process';
+import webpack from 'webpack';
+import CopyPlugin from 'copy-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
+import WorkboxPlugin from 'workbox-webpack-plugin';
+import webpackDevServer from 'webpack-dev-server';
+
+import routes from '../suite/src/config/suite/routes';
+import { FLAGS } from '../suite/src/config/suite/features';
 
 const { NODE_ENV, ANALYZE } = process.env;
 
-const environment = NODE_ENV || 'development';
+const environment = NODE_ENV === 'production' ? NODE_ENV : 'development';
 const isDev = environment === 'development';
 const isAnalyzing = ANALYZE === 'true';
 const pkgFile = require('./package.json');
@@ -23,7 +27,7 @@ const { compilerOptions } = require('../../tsconfig.json');
 const paths = compilerOptions.paths;
 const pathKeys = Object.keys(paths).filter(p => !p.includes('*'));
 
-const getPath = (key) => {
+const getPath = (key: string) => {
     let p = paths[key][0];
     if (p.endsWith('index')) {
         p = p.slice(0, -5);
@@ -33,19 +37,20 @@ const getPath = (key) => {
 };
 
 // Alias
-const alias = {};
+const alias: { [key: string]: string; } = {};
 pathKeys.forEach(key => {
     alias[key] = path.resolve(getPath(key));
 });
 
-// Routes
-const routesConfig = require('./src/config/routes.json');
-const routePaths = routesConfig.map(r => r.path);
-
 // Prefix
 const assetPrefix = process.env.assetPrefix || '';
 
-module.exports = {
+interface Config extends webpack.Configuration {
+    devServer: webpackDevServer.Configuration;
+    plugins: any[],
+}
+
+const config: Config = {
     mode: environment,
     target: isDev ? 'web' : 'browserslist',
     devtool: isDev ? 'source-map' : false,
@@ -200,7 +205,7 @@ module.exports = {
                 {
                     from: path.join(__dirname, 'src', 'static', 'manifest.json'),
                     to: path.join(__dirname, 'build', 'manifest.json'),
-                    transform: (content) => content.toString().replace(/\{assetPrefix\}/g, assetPrefix),
+                    transform: (content: any) => content.toString().replace(/\{assetPrefix\}/g, assetPrefix),
                 },
             ],
             options: {
@@ -208,7 +213,7 @@ module.exports = {
             },
         }),
         // Html files
-        ...routePaths.map(r => {
+        ...routes.map(route => {
             return new HtmlWebpackPlugin({
                 minify: !isDev,
                 template: path.join(__dirname, 'src', 'static', 'index.html'),
@@ -216,7 +221,7 @@ module.exports = {
                     assetPrefix: assetPrefix,
                     isOnionLocation: false, // TODO: Get from flags
                 },
-                filename: path.join(__dirname, 'build', r, 'index.html'),
+                filename: path.join(__dirname, 'build', route.pattern, 'index.html'),
             });
         }),
         new HtmlWebpackPlugin({
@@ -229,49 +234,52 @@ module.exports = {
             filename: path.join(__dirname, 'build', '404.html'),
         }),
         // PWA
-        new WorkboxPlugin.GenerateSW({
-            swDest: 'sw.js',
-            clientsClaim: true,
-            skipWaiting: true,
-            maximumFileSizeToCacheInBytes: 10 * 1000 * 1000,
-            runtimeCaching: [
-                {
-                    urlPattern: /.*\.js(.map)?$/,
-                    handler: 'NetworkFirst',
-                    options: {
-                        cacheName: 'js-cache',
-                    },
-                },
-                {
-                    urlPattern: '/(news|connect).trezor.io/',
-                    handler: 'NetworkFirst',
-                    options: {
-                        cacheName: 'api-cache',
-                    },
-                },
-                {
-                    urlPattern: /\.(gif|jpe?g|png|svg)$/,
-                    handler: 'CacheFirst',
-                    options: {
-                        cacheName: 'image-cache',
-                        cacheableResponse: {
-                            statuses: [0, 200],
+        ...FLAGS.PWA ? [
+            new WorkboxPlugin.GenerateSW({
+                swDest: 'sw.js',
+                clientsClaim: true,
+                skipWaiting: true,
+                maximumFileSizeToCacheInBytes: 10 * 1000 * 1000,
+                runtimeCaching: [
+                    {
+                        urlPattern: /.*\.js(.map)?$/,
+                        handler: 'NetworkFirst',
+                        options: {
+                            cacheName: 'js-cache',
                         },
                     },
-                },
-            ],
-        }),
-
+                    {
+                        urlPattern: '/(news|connect).trezor.io/',
+                        handler: 'NetworkFirst',
+                        options: {
+                            cacheName: 'api-cache',
+                        },
+                    },
+                    {
+                        urlPattern: /\.(gif|jpe?g|png|svg)$/,
+                        handler: 'CacheFirst',
+                        options: {
+                            cacheName: 'image-cache',
+                            cacheableResponse: {
+                                statuses: [0, 200],
+                            },
+                        },
+                    },
+                ],
+            }),
+        ] : [],
         // Webpack Dev server only
-        ...(isDev ? [
+        ...isDev ? [
             new webpack.HotModuleReplacementPlugin(),
             new ReactRefreshWebpackPlugin(),
-        ] : []),
-        ...(isAnalyzing ? [
+        ] : [],
+        ...isAnalyzing ? [
             new BundleAnalyzerPlugin({
                 openAnalyzer: false,
             }),
-        ] : []),
+        ] : [],
         // new webpack.debug.ProfilingPlugin()
     ],
 };
+
+export default config;
