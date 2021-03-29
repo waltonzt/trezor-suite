@@ -6,7 +6,6 @@
 
 const walletParams = ['symbol', 'accountIndex', 'accountType'] as const;
 const modalAppParams = ['cancelable'] as const;
-
 const routes = [
     {
         name: 'suite-welcome',

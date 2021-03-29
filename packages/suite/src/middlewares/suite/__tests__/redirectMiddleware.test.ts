@@ -123,6 +123,7 @@ describe('redirectMiddleware', () => {
                             app: 'wallet',
                             params: ['symbol', 'accountIndex', 'accountType'],
                             isModal: undefined,
+                            exact: true,
                         },
                     },
                 ),

@@ -104,6 +104,7 @@ describe('onboardingMiddleware', () => {
                         app: 'onboarding',
                         isModal: true,
                         params: ['cancelable'],
+                        exact: undefined,
                     },
                 }),
             );

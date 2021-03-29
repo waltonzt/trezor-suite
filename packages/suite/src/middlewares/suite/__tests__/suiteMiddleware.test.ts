@@ -90,6 +90,7 @@ describe('suite middleware', () => {
                         app: 'onboarding',
                         isModal: true,
                         params: ['cancelable'],
+                        exact: undefined,
                     },
                 }),
             );
