@@ -121,7 +121,7 @@ async function runTests() {
             video: true,
             chromeWebSecurity: false,
             trashAssetsBeforeRuns: false,
-            defaultCommandTimeout: 15000,
+            defaultCommandTimeout: 20000,
         };
 
         if (userAgent) {
