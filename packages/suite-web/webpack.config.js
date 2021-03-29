@@ -236,7 +236,7 @@ module.exports = {
             maximumFileSizeToCacheInBytes: 10 * 1000 * 1000,
             runtimeCaching: [
                 {
-                    urlPattern: /.*\.js(.map)?/,
+                    urlPattern: /.*\.js(.map)?$/,
                     handler: 'NetworkFirst',
                     options: {
                         cacheName: 'js-cache',
@@ -250,7 +250,7 @@ module.exports = {
                     },
                 },
                 {
-                    urlPattern: /.*\.(?:png|jpg|jpeg|svg|gif)/,
+                    urlPattern: /\.(gif|jpe?g|png|svg)$/,
                     handler: 'CacheFirst',
                     options: {
                         cacheName: 'image-cache',
