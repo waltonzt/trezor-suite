@@ -530,6 +530,17 @@ const changed = [
         ],
         result: [],
     },
+    {
+        description: `features are not overriden when device is locked`,
+        initialState: [getConnectDevice(undefined, { safety_checks: 'Strict' })],
+        actions: [
+            {
+                type: DEVICE.CHANGED,
+                payload: getConnectDevice(undefined, { unlocked: false, safety_checks: null }),
+            },
+        ],
+        result: [getConnectDevice(undefined, { safety_checks: 'Strict' })],
+    },
 ];
 
 const updateTimestamp = [
