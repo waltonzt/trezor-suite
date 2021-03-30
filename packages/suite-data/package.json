@@ -18,7 +18,7 @@
         "ua-parser-js": "^0.7.24"
     },
     "devDependencies": {
-        "@types/fs-extra": "^9.0.6",
+        "@types/fs-extra": "^9.0.9",
         "@types/ua-parser-js": "^0.7.35",
         "copy-webpack-plugin": "^6.0.2",
         "fs-extra": "^9.0.1",
