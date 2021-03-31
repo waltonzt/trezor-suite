@@ -10,7 +10,7 @@ type Cursor = 'inherit' | 'pointer' | 'help' | 'default';
 
 const Wrapper = styled.div``;
 
-const TooltipBoxDefault = styled(animated.div)<{ maxWidth: number }>`
+const BoxDefault = styled(animated.div)<{ maxWidth: string | number }>`
     padding: 4px 5px;
     background: ${props => props.theme.BG_TOOLTIP};
     color: ${props => props.theme.TYPE_WHITE};
@@ -22,11 +22,7 @@ const TooltipBoxDefault = styled(animated.div)<{ maxWidth: number }>`
     max-width: ${props => props.maxWidth}px;
 `;
 
-const BoxDefault = (props: React.ComponentProps<typeof TooltipBoxDefault>) => (
-    <TooltipBoxDefault {...props} />
-);
-
-const TooltipBoxRich = styled(animated.div)<{ maxWidth: number }>`
+const BoxRich = styled(animated.div)<{ maxWidth: string | number }>`
     padding: 24px;
     background: ${props => props.theme.BG_WHITE_ALT};
     color: ${props => props.theme.TYPE_DARK_GREY};
@@ -36,10 +32,6 @@ const TooltipBoxRich = styled(animated.div)<{ maxWidth: number }>`
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
     max-width: ${props => props.maxWidth}px;
 `;
-
-const BoxRich = (props: React.ComponentProps<typeof TooltipBoxRich>) => (
-    <TooltipBoxRich {...props} />
-);
 
 const Content = styled.div<{ dashed?: boolean; cursor: Cursor }>`
     & > * {
