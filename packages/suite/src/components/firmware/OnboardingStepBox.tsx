@@ -51,12 +51,7 @@ const OnboardingStepBox = ({
                     ) : undefined}
                 </ConfirmWrapper>
             )}
-            <Box
-                image={image ?? 'RECOVER_FROM_SEED'}
-                heading={heading}
-                description={description}
-                {...rest}
-            >
+            <Box image={image} heading={heading} description={description} {...rest}>
                 {(children || innerActions) && (
                     <>
                         {children}

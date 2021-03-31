@@ -11,6 +11,7 @@ const SecurityStep = () => {
     return (
         <OnboardingLayout activeStep={1}>
             <OnboardingStepBox
+                image="FOLDER"
                 heading={<Translation id="TR_SECURITY_HEADING" />}
                 description={<Translation id="TR_SECURITY_SUBHEADING" />}
                 innerActions={

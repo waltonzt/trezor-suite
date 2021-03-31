@@ -98,4 +98,8 @@ export const ICONS = {
     WINDOW_RESTORE: require('../../images/icons/window_restore.svg'),
     WINDOW_RESTORE_MAC: require('../../images/icons/window_restore_mac.svg'),
     TOR: require('../../images/icons/tor.svg'),
+    RECOVER: require('../../images/icons/recover.svg'),
+    NEW: require('../../images/icons/new.svg'),
+    SEED_SINGLE: require('../../images/icons/seed_single.svg'),
+    SEED_SHAMIR: require('../../images/icons/seed_shamir.svg'),
 };

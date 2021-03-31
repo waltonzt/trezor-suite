@@ -47,6 +47,7 @@ const ResetDeviceStep = () => {
     return (
         <OnboardingLayout activeStep={1}>
             <OnboardingStepBox
+                image="KEY"
                 heading={<Translation id="TR_ONBOARDING_GENERATE_SEED" />}
                 description={<Translation id="TR_ONBOARDING_GENERATE_SEED_DESCRIPTION" />}
                 confirmOnDevice={
@@ -63,7 +64,7 @@ const ResetDeviceStep = () => {
                     <OptionsWrapper>
                         <OptionWrapper>
                             <NeueOption
-                                icon="REFRESH"
+                                icon="SEED_SINGLE"
                                 data-test={
                                     isShamirBackupAvailable
                                         ? '@onboarding/button-standard-backup'
@@ -92,7 +93,7 @@ const ResetDeviceStep = () => {
                                 <Divider />
                                 <OptionWrapper>
                                     <NeueOption
-                                        icon="REFRESH"
+                                        icon="SEED_SHAMIR"
                                         onClick={() => {
                                             callActionAndGoToNextStep(
                                                 // eslint-disable-next-line @typescript-eslint/naming-convention

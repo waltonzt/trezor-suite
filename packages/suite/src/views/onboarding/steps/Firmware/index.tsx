@@ -40,6 +40,7 @@ const FirmwareStep = () => {
             return {
                 Body: (
                     <OnboardingStepBox
+                        image="FIRMWARE"
                         heading={<Translation id="TR_FW_INSTALLATION_FAILED" />}
                         description={
                             <Translation
@@ -60,6 +61,7 @@ const FirmwareStep = () => {
             return {
                 Body: (
                     <OnboardingStepBox
+                        image="FIRMWARE"
                         heading={<Translation id="TR_FIRMWARE_IS_UP_TO_DATE" />}
                         description={
                             <Translation

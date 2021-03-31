@@ -42,12 +42,13 @@ const CreateOrRecoverStep = () => {
     return (
         <OnboardingLayout activeStep={1}>
             <OnboardingStepBox
+                image="WALLET"
                 heading={<Translation id="TR_WELCOME_TO_TREZOR_TEXT_WALLET_CREATION" />}
             >
                 <OptionsWrapper>
                     <OptionWrapper>
                         <NeueOption
-                            icon="PLUS"
+                            icon="NEW"
                             data-test="@onboarding/path-create-button"
                             onClick={() => {
                                 addPath(STEP.PATH_CREATE);
@@ -60,7 +61,7 @@ const CreateOrRecoverStep = () => {
                     <Divider />
                     <OptionWrapper>
                         <NeueOption
-                            icon="REFRESH"
+                            icon="RECOVER"
                             data-test="@onboarding/path-recovery-button"
                             onClick={() => {
                                 addPath(STEP.PATH_RECOVERY);

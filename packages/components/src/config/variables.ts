@@ -152,4 +152,8 @@ export const ICONS: IconType[] = [
     'WINDOW_RESTORE',
     'WINDOW_RESTORE_MAC',
     'TOR',
+    'RECOVER',
+    'NEW',
+    'SEED_SINGLE',
+    'SEED_SHAMIR',
 ];

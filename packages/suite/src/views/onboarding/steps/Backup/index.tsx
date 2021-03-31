@@ -41,6 +41,7 @@ const BackupStep = () => {
         <OnboardingLayout activeStep={1}>
             {status === 'initial' && (
                 <OnboardingStepBox
+                    image="BACKUP"
                     heading={<Translation id="TR_CREATE_BACKUP" />}
                     description={
                         <Translation
@@ -80,6 +81,7 @@ const BackupStep = () => {
             )}
             {status === 'in-progress' && (
                 <OnboardingStepBox
+                    image="BACKUP"
                     heading={<Translation id="TR_CREATE_BACKUP" />}
                     description={
                         <Translation
@@ -99,6 +101,7 @@ const BackupStep = () => {
 
             {status === 'finished' && !backup.error && (
                 <OnboardingStepBox
+                    image="BACKUP"
                     heading={<Translation id="TR_BACKUP_CREATED" />}
                     description={<Translation id="TR_BACKUP_FINISHED_TEXT" />}
                     innerActions={
@@ -114,6 +117,7 @@ const BackupStep = () => {
             )}
             {status === 'finished' && backup.error && (
                 <OnboardingStepBox
+                    image="BACKUP"
                     heading={<Translation id="TOAST_BACKUP_FAILED" />}
                     description={
                         <Translation id="TR_DEVICE_DISCONNECTED_DURING_ACTION_DESCRIPTION" />
