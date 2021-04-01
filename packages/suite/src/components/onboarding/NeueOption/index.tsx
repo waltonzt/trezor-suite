@@ -35,6 +35,24 @@ const IconWrapper = styled.div`
     margin-right: 24px;
 `;
 
+export const OptionsWrapper = styled.div`
+    display: flex;
+    width: 100%;
+
+    @media all and (max-width: ${variables.SCREEN_SIZE.SM}) {
+        flex-direction: column;
+    }
+`;
+
+export const OptionWrapper = styled.div`
+    display: flex;
+    width: 100%;
+`;
+
+export const OptionsDivider = styled.div`
+    flex: 0 0 24px;
+`;
+
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
     heading: React.ReactNode;
     description?: React.ReactNode;
@@ -51,7 +69,7 @@ const Option = ({ icon, heading, description, ...rest }: Props) => {
             )}
             <Content>
                 <Heading>{heading}</Heading>
-                <Description>{description}</Description>
+                {description && <Description>{description}</Description>}
             </Content>
         </Wrapper>
     );
