@@ -1357,6 +1357,42 @@ const definedMessages = defineMessages({
             'If you forget your passphrase, your wallet is lost for good. There is no way to recover your funds.',
         id: 'TR_DEVICE_SETTINGS_PASSPHRASE_DESC_MORE',
     },
+    TR_DEVICE_SETTINGS_SAFETY_CHECKS_TITLE: {
+        defaultMessage: 'Safety checks',
+        id: 'TR_DEVICE_SETTINGS_SAFETY_CHECKS_TITLE',
+    },
+    TR_DEVICE_SETTINGS_SAFETY_CHECKS_DESC: {
+        defaultMessage: 'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.',
+        id: 'TR_DEVICE_SETTINGS_SAFETY_CHECKS_DESC',
+    },
+    TR_DEVICE_SETTINGS_SAFETY_CHECKS_BUTTON: {
+        defaultMessage: 'Edit',
+        id: 'TR_DEVICE_SETTINGS_SAFETY_CHECKS_BUTTON',
+    },
+    TR_SAFETY_CHECKS_MODAL_TITLE: {
+        defaultMessage: 'Safety checks',
+        id: 'TR_SAFETY_CHECKS_MODAL_TITLE',
+    },
+    TR_SAFETY_CHECKS_STRICT_LEVEL: {
+        defaultMessage: 'Strict',
+        id: 'TR_SAFETY_CHECKS_STRICT_LEVEL',
+    },
+    TR_SAFETY_CHECKS_STRICT_LEVEL_DESC: {
+        defaultMessage: 'Strict level description',
+        id: 'TR_SAFETY_CHECKS_STRICT_LEVEL_DESC',
+    },
+    TR_SAFETY_CHECKS_PROMPT_LEVEL: {
+        defaultMessage: 'Prompt',
+        id: 'TR_SAFETY_CHECKS_PROMPT_LEVEL',
+    },
+    TR_SAFETY_CHECKS_PROMPT_LEVEL_WARNING: {
+        defaultMessage: 'We really don’t recommend this.',
+        id: 'TR_SAFETY_CHECKS_PROMPT_LEVEL_WARNING',
+    },
+    TR_SAFETY_CHECKS_PROMPT_LEVEL_DESC: {
+        defaultMessage: 'Prompt level description',
+        id: 'TR_SAFETY_CHECKS_PROMPT_LEVEL_DESC',
+    },
     TR_DEVICE_SETTINGS_PASSPHRASE_TITLE: {
         defaultMessage: 'Passphrase',
         id: 'TR_DEVICE_SETTINGS_PASSPHRASE_TITLE',
