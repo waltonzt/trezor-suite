@@ -7,21 +7,23 @@ import { getValidMessages } from '@suite-utils/messageSystem';
 import { WALLET_SETTINGS } from '@suite/actions/settings/constants';
 import { saveValidMessages } from '@suite/actions/suite/messageSystemActions';
 
+// actions which can affect message system messages
+const actions = [
+    STORAGE.LOADED,
+    SUITE.SELECT_DEVICE,
+    SUITE.TOR_STATUS,
+    TRANSPORT.START,
+    MESSAGE_SYSTEM.FETCH_CONFIG_SUCCESS_UPDATE,
+    MESSAGE_SYSTEM.USE_BUNDLED_CONFIG,
+    WALLET_SETTINGS.CHANGE_NETWORKS,
+];
+
 const messageSystemMiddleware = (api: MiddlewareAPI<Dispatch, AppState>) => (next: Dispatch) => (
     action: Action,
 ): Action => {
     next(action);
 
-    // All actions listed below can affect message system
-    if (
-        action.type === STORAGE.LOADED ||
-        action.type === SUITE.SELECT_DEVICE ||
-        action.type === SUITE.TOR_STATUS ||
-        action.type === TRANSPORT.START ||
-        action.type === MESSAGE_SYSTEM.FETCH_CONFIG_SUCCESS_UPDATE ||
-        action.type === MESSAGE_SYSTEM.USE_BUNDLED_CONFIG ||
-        action.type === WALLET_SETTINGS.CHANGE_NETWORKS
-    ) {
+    if (actions.includes(action.type)) {
         const { config } = api.getState().messageSystem;
         const { device, transport, tor } = api.getState().suite;
         const { enabledNetworks } = api.getState().wallet.settings;
