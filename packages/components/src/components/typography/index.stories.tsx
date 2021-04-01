@@ -1,6 +1,6 @@
 import React from 'react';
 import { StoryColumn } from '../../support/Story';
-import { H1, H2, P, Link } from '../../index';
+import { H1, H2, P, Link, Warning } from '../../index';
 import { storiesOf } from '@storybook/react';
 
 storiesOf('Typography', module).add(
@@ -57,6 +57,7 @@ storiesOf('Typography', module).add(
                     <P size="tiny" data-test="paragraph-link-tiny">
                         Tiny text with <Link href="/">link</Link>.
                     </P>
+                    <Warning>Warning! Here dragons abound. 🐲</Warning>
                 </StoryColumn>
             </>
         );
