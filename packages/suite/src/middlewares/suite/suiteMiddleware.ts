@@ -58,17 +58,17 @@ const suite = (api: MiddlewareAPI<Dispatch, AppState>) => (next: Dispatch) => as
             }
             // right after storage is loaded, we might start:
             // 1. fetching locales
-            // 2. redirecting user into welcome screen (if needed)
+            // 2. fetch message system config
+            // 3. redirecting user into welcome screen (if needed)
             await Promise.all([
                 api.dispatch(fetchLocale(action.payload.suite.settings.language)),
+                api.dispatch(messageSystemActions.init()),
                 api.dispatch(routerActions.initialRedirection()),
             ]);
-            // 3. init connect;
+            // 4. init connect;
             api.dispatch(trezorConnectActions.init());
-            // 4. init analytics
+            // 5. init analytics
             api.dispatch(analyticsActions.init(action.payload.analytics, true));
-            // 5. fetch message system config
-            api.dispatch(messageSystemActions.init());
             break;
         }
         case SUITE.CONNECT_INITIALIZED:
