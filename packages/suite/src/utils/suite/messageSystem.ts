@@ -23,7 +23,7 @@ type CurrentSettings = {
     enabledNetworks: Network['symbol'][];
 };
 
-export type Options = {
+type Options = {
     settings: CurrentSettings;
     transport?: Partial<TransportInfo>;
     device?: TrezorDevice;

@@ -1,10 +1,9 @@
 import { MiddlewareAPI } from 'redux';
 import { TRANSPORT } from 'trezor-connect';
 
-import { Category, Message } from '@suite-types/messageSystem';
 import { MESSAGE_SYSTEM, STORAGE, SUITE } from '@suite-actions/constants';
 import { AppState, Action, Dispatch } from '@suite-types';
-import { getValidMessages, Options } from '@suite-utils/messageSystem';
+import { getValidMessages } from '@suite-utils/messageSystem';
 import { WALLET_SETTINGS } from '@suite/actions/settings/constants';
 import { saveValidMessages } from '@suite/actions/suite/messageSystemActions';
 
@@ -27,30 +26,28 @@ const messageSystemMiddleware = (api: MiddlewareAPI<Dispatch, AppState>) => (nex
         const { device, transport, tor } = api.getState().suite;
         const { enabledNetworks } = api.getState().wallet.settings;
 
-        const options: Options = {
+        const messages = getValidMessages(config, {
             device,
             transport,
             settings: {
                 tor,
                 enabledNetworks,
             },
-        };
-
-        const messages = getValidMessages(config, options);
+        });
 
         if (messages.length) {
             const banners: string[] = [];
             const modals: string[] = [];
             const contexts: string[] = [];
 
-            messages.forEach((message: Message) => {
+            messages.forEach(message => {
                 let { category: categories } = message;
 
                 if (typeof categories === 'string') {
                     categories = [categories];
                 }
 
-                categories.forEach((category: Category) => {
+                categories.forEach(category => {
                     if (category === 'banner') {
                         banners.push(message.id);
                     } else if (category === 'modal') {
