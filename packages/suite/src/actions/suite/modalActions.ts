@@ -70,6 +70,11 @@ export type UserContextPayload =
           decision: Deferred<boolean>;
       }
     | {
+          type: 'coinmarket-sell-terms';
+          provider?: string;
+          decision: Deferred<boolean>;
+      }
+    | {
           type: 'coinmarket-leave-spend';
           routeToContinue?: Route['name'];
       }
@@ -203,6 +208,7 @@ type DeferredModals = Extract<
             | 'review-transaction'
             | 'import-transaction'
             | 'coinmarket-buy-terms'
+            | 'coinmarket-sell-terms'
             | 'coinmarket-exchange-terms';
     }
 >;

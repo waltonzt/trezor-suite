@@ -129,7 +129,7 @@ const pushTransaction = () => async (dispatch: Dispatch, getState: GetState) => 
     const { signedTx, precomposedTx } = getState().wallet.send;
     const { account } = getState().wallet.selectedAccount;
     const { device } = getState().suite;
-    if (!signedTx || !precomposedTx || !account) return false;
+    if (!signedTx || !precomposedTx || !account) return;
 
     const sentTx = await TrezorConnect.pushTransaction(signedTx);
     // const sentTx = { success: true, payload: { txid: 'ABC ' } };
@@ -190,7 +190,7 @@ const pushTransaction = () => async (dispatch: Dispatch, getState: GetState) => 
     }
 
     // resolve sign process
-    return sentTx.success;
+    return sentTx;
 };
 
 export const signTransaction = (

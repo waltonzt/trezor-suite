@@ -221,7 +221,7 @@ export const useSendForm = (props: UseSendFormProps): SendContextValues => {
             updateContext({ isLoading: true });
             const result = await signTransaction(values, composedTx);
             updateContext({ isLoading: false });
-            if (result) {
+            if (result?.success) {
                 resetContext();
             }
         }

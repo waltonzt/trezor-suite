@@ -3,6 +3,7 @@ import {
     formatCryptoAmount,
     symbolToInvityApiSymbol,
     getUnusedAddressFromAccount,
+    getCountryLabelParts,
 } from '../coinmarketUtils';
 
 describe('coinmarket utils', () => {
@@ -56,6 +57,17 @@ describe('coinmarket utils', () => {
         expect(getUnusedAddressFromAccount(accountMockEth)).toStrictEqual({
             address: '0x2e0DC981d301cdd443C3987cf19Eb9671CB99ddC',
             path: "m/44'/60'/0'/0/1",
+        });
+    });
+
+    it('getCountryLabelParts', () => {
+        expect(getCountryLabelParts('🇨🇿 Czech Republic')).toStrictEqual({
+            flag: '🇨🇿',
+            text: 'Czech Republic',
+        });
+        expect(getCountryLabelParts('aaa')).toStrictEqual({
+            flag: '',
+            text: 'aaa',
         });
     });
 });

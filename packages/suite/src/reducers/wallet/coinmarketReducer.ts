@@ -8,6 +8,8 @@ import {
     ExchangeTradeQuoteRequest,
     ExchangeTrade,
     ExchangeCoinInfo,
+    SellFiatTrade,
+    SellFiatTradeQuoteRequest,
 } from 'invity-api';
 import { BuyInfo } from '@wallet-actions/coinmarketBuyActions';
 import { ExchangeInfo } from '@wallet-actions/coinmarketExchangeActions';
@@ -57,6 +59,11 @@ interface Exchange {
 interface Sell {
     sellInfo?: SellInfo;
     showLeaveModal: boolean;
+    quotesRequest?: SellFiatTradeQuoteRequest;
+    quotes: SellFiatTrade[];
+    alternativeQuotes?: SellFiatTrade[];
+    transactionId?: string;
+    isFromRedirect: boolean;
 }
 
 interface State {
@@ -95,6 +102,11 @@ export const initialState = {
     sell: {
         showLeaveModal: false,
         sellInfo: undefined,
+        quotesRequest: undefined,
+        quotes: [],
+        alternativeQuotes: [],
+        transactionId: undefined,
+        isFromRedirect: false,
     },
     composedTransactionInfo: {},
     trades: [],
@@ -171,8 +183,21 @@ const coinmarketReducer = (
             case COINMARKET_SELL.SAVE_SELL_INFO:
                 draft.sell.sellInfo = action.sellInfo;
                 break;
+            case COINMARKET_SELL.SAVE_QUOTE_REQUEST:
+                draft.sell.quotesRequest = action.request;
+                break;
+            case COINMARKET_SELL.SAVE_QUOTES:
+                draft.sell.quotes = action.quotes;
+                draft.sell.alternativeQuotes = action.alternativeQuotes;
+                break;
             case COINMARKET_SELL.SHOW_LEAVE_MODAL:
                 draft.sell.showLeaveModal = action.showLeaveModal;
+                break;
+            case COINMARKET_SELL.SET_IS_FROM_REDIRECT:
+                draft.sell.isFromRedirect = action.isFromRedirect;
+                break;
+            case COINMARKET_SELL.SAVE_TRANSACTION_ID:
+                draft.sell.transactionId = action.transactionId;
                 break;
             // no default
         }
