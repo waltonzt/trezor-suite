@@ -3,10 +3,10 @@ import * as fixtures from '../__fixtures__/messageSystem';
 import * as env from '@suite-utils/env';
 
 describe('Message system utils', () => {
-    describe('normalizeVersion', () => {
-        fixtures.normalizeVersion.forEach(f => {
+    describe('createVersionRange', () => {
+        fixtures.createVersionRange.forEach(f => {
             it(f.description, () => {
-                expect(messageSystem.normalizeVersion(f.input)).toEqual(f.result);
+                expect(messageSystem.createVersionRange(f.input)).toEqual(f.result);
             });
         });
     });

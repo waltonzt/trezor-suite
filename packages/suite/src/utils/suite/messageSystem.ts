@@ -30,17 +30,32 @@ type Options = {
     device?: TrezorDevice;
 };
 
-// normalize versions for semver library
-export const normalizeVersion = (version: Version | undefined): string | null => {
-    if (version === undefined || version === '!') {
+/**
+ * Creates a version range by chaining single versions using '||' delimiter.
+ * Optimized for 'satisfies' function from 'semver' library.
+ * @param {Version} versions
+ * @returns {string | null}
+ */
+export const createVersionRange = (versions: Version | undefined): string | null => {
+    // if version range is 'null' then the 'satisfies' always returns false
+    if (versions === undefined || versions === '!') {
         return null;
     }
 
-    if (typeof version === 'string') {
-        return version;
+    if (typeof versions === 'string') {
+        return versions;
     }
 
-    return version.join(' || ');
+    return versions.join(' || ');
+};
+
+/**
+ * Transforms version to semver format.
+ * @param {string | undefined} version
+ * @returns {string}
+ */
+const getNormalizedVersion = (version: string | undefined): string => {
+    return semver.valid(semver.coerce(version)) || '';
 };
 
 export const validateDurationCompatibility = (durationCondition: Duration): boolean => {
@@ -57,7 +72,7 @@ export const validateVersionCompatibility = (
     type: string | SuiteEnvironmentType,
     version: string,
 ): boolean => {
-    const conditionVersion = normalizeVersion(condition[type]);
+    const conditionVersion = createVersionRange(condition[type]);
 
     if (conditionVersion === null) {
         return false;
@@ -102,7 +117,7 @@ export const validateDeviceCompatibility = (
     deviceConditions: Device[],
     device?: TrezorDevice,
 ): boolean => {
-    // if conditions are empty, then device should be empty
+    // if device conditions are empty, then device should be empty
     if (!deviceConditions.length) {
         return !device;
     }
@@ -110,15 +125,14 @@ export const validateDeviceCompatibility = (
         return false;
     }
 
-    const { model, vendor } = device.features;
-
     const deviceFwVersion = getFwVersion(device);
+    const { model, vendor } = device.features;
 
     return deviceConditions.some(
         deviceCondition =>
             deviceCondition.model.toLowerCase() === model.toLowerCase() &&
             deviceCondition.vendor.toLowerCase() === vendor.toLowerCase() &&
-            semver.satisfies(deviceFwVersion, normalizeVersion(deviceCondition.firmware)!),
+            semver.satisfies(deviceFwVersion, createVersionRange(deviceCondition.firmware)!),
     );
 };
 
@@ -133,14 +147,14 @@ export const getValidMessages = (config: MessageSystem | null, options: Options)
 
     const osDetail = ua.getOS();
     const currentOsName = osDetail.name?.toLowerCase() || '';
-    const currentOsVersion = semver.valid(semver.coerce(osDetail.version)) || '';
+    const currentOsVersion = getNormalizedVersion(osDetail.version);
 
     const browserDetail = ua.getBrowser();
     const currentBrowserName = browserDetail.name?.toLowerCase() || '';
-    const currentBrowserVersion = semver.valid(semver.coerce(browserDetail.version)) || '';
+    const currentBrowserVersion = getNormalizedVersion(browserDetail.version);
 
     const environment = getEnvironment();
-    const suiteVersion = semver.valid(semver.coerce(process.env.VERSION)) || '';
+    const suiteVersion = getNormalizedVersion(process.env.VERSION);
 
     return config.actions
         .filter(

@@ -1,33 +1,33 @@
 const { getDeviceFeatures } = global.JestMocks;
 
-export const normalizeVersion = [
+export const createVersionRange = [
     {
-        description: 'normalizeVersion case 1',
+        description: 'createVersionRange case 1',
         input: '!',
         result: null,
     },
     {
-        description: 'normalizeVersion case 2',
+        description: 'createVersionRange case 2',
         input: undefined,
         result: null,
     },
     {
-        description: 'normalizeVersion case 3',
+        description: 'createVersionRange case 3',
         input: '',
         result: '',
     },
     {
-        description: 'normalizeVersion case 4',
+        description: 'createVersionRange case 4',
         input: '15.0.0',
         result: '15.0.0',
     },
     {
-        description: 'normalizeVersion case 5',
+        description: 'createVersionRange case 5',
         input: ['15.0.0'],
         result: '15.0.0',
     },
     {
-        description: 'normalizeVersion case 6',
+        description: 'createVersionRange case 6',
         input: ['16', '<13', '18.x'],
         result: '16 || <13 || 18.x',
     },
