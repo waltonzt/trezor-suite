@@ -17,6 +17,7 @@ import {
 import { Network } from '@wallet-types';
 import { SuiteEnvironmentType, TrezorDevice } from '@suite-types';
 import { getUserAgent, getEnvironment } from '@suite-utils/env';
+import { getFwVersion } from './device';
 
 type CurrentSettings = {
     tor: boolean;
@@ -109,21 +110,15 @@ export const validateDeviceCompatibility = (
         return false;
     }
 
-    const {
-        model,
-        vendor,
-        major_version: majorVersion,
-        minor_version: minorVersion,
-        patch_version: patchVersion,
-    } = device.features;
+    const { model, vendor } = device.features;
 
-    const deviceVersion = `${majorVersion}.${minorVersion}.${patchVersion}`;
+    const deviceFwVersion = getFwVersion(device);
 
     return deviceConditions.some(
         deviceCondition =>
             deviceCondition.model.toLowerCase() === model.toLowerCase() &&
             deviceCondition.vendor.toLowerCase() === vendor.toLowerCase() &&
-            semver.satisfies(deviceVersion, normalizeVersion(deviceCondition.firmware)!),
+            semver.satisfies(deviceFwVersion, normalizeVersion(deviceCondition.firmware)!),
     );
 };
 

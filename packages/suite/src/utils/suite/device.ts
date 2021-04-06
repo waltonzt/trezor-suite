@@ -111,6 +111,7 @@ export const isSelectedDevice = (selected?: TrezorDevice | Device, device?: Trez
     return selected.id === device.id;
 };
 
+// TODO: Is this required? features.model returns "T" or "1"
 export const getVersion = (device: TrezorDevice) => {
     const { features } = device;
     return features && features.major_version > 1 ? 'T' : 'One';
